@@ -14,6 +14,7 @@ mindmap
         Presente, uso próprio, defeito
         Ajuste da conferência
       Saldo por movimentações
+        nunca negativo: saída maior que o saldo é bloqueada
       Alerta ceil 30% da última entrada
       Lucro do mês por CMV
         custo médio ponderado

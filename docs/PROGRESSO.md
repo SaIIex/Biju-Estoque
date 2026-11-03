@@ -25,6 +25,7 @@ Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/r
 
 ### Estoque
 - Modelo: **histórico de movimentações** (entrada, venda, presente, uso próprio, defeito, ajuste). Saldo = soma das movimentações.
+- Saldo nunca negativo: saída maior que o saldo é bloqueada (requisito surgido no exemplo das regras de testes).
 - Entradas: compras Shopee/Shein por unidade, custo conhecido por peça. Custo registrado a cada entrada.
 - Alerta de estoque baixo: **30% da quantidade da última entrada, arredondado para cima**. Ajuste de conferência não muda a base.
 - Conferência física: semanal; diferença vira movimentação de ajuste.
@@ -64,7 +65,7 @@ Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/r
 - Confirmar com a dona a lógica do código da peça.
 
 ## Próximo passo
-1. Salles adiciona a seção `# Regras de testes` ao CLAUDE.md; eu reviso.
+1. Regras de testes escritas no CLAUDE.md e revisadas. Salles ajusta o exemplo para sintaxe pytest e faz o commit.
 2. Fase 2: modelagem ER (produto, movimentação, custo médio ponderado gravado na venda).
 3. Confirmar com a dona a lógica do código da peça.
 
