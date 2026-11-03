@@ -1,0 +1,27 @@
+# Segredos (chave da Claude API, senha da dona)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Banco local e uploads
+*.db
+*.sqlite3
+uploads/
+
+# Editor e sistema
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Configuração local do Claude Code
+.claude/settings.local.json
