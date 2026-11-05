@@ -186,3 +186,26 @@ def test_s11_alerta_usa_a_ultima_entrada(session):
 def test_s14_produto_sem_entrada_nao_alerta(session):
     produto = _colar(session)
     assert precisa_alerta(session, produto.id) is False
+
+
+def test_s11b_base_e_a_ultima_entrada_nao_a_primeira(session):
+    # Pega o bug M4: usar a primeira entrada como base do alerta.
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=10, custo_unitario=Decimal("10"))
+    registrar_saida(session, produto.id, T.VENDA, quantidade=8, preco_venda=Decimal("50"))
+    registrar_entrada(session, produto.id, quantidade=1, custo_unitario=Decimal("10"))
+    # saldo 3. Base certa = 1 (limite 1) -> não avisa. Base errada = 10 (limite 3) -> avisaria.
+    assert precisa_alerta(session, produto.id) is False
+
+
+# --- isolamento entre peças -----------------------------------------------------
+
+def test_s15_saldo_e_isolado_por_peca(session):
+    # Pega o bug M10: saldo somando o estoque de todas as peças.
+    colar = _colar(session, codigo="C1")
+    brinco = cadastrar_produto(session, codigo="B1", nome="Brinco", preco_venda=Decimal("20"))
+    registrar_entrada(session, colar.id, quantidade=4, custo_unitario=Decimal("15"))
+    registrar_entrada(session, brinco.id, quantidade=2, custo_unitario=Decimal("8"))
+
+    assert saldo(session, colar.id) == 4
+    assert saldo(session, brinco.id) == 2

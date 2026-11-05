@@ -15,6 +15,7 @@ Quando o código original mudar, a cópia aqui pode ficar desatualizada. Na dúv
 7. [app/modelos.py](app/modelos.py): tabelas como classes (Code First com SQLAlchemy).
 8. [app/servicos/estoque.py](app/servicos/estoque.py): serviço que junta domínio e banco; unit of work.
 9. [tests/conftest.py](tests/conftest.py): fixtures do pytest e banco em memória para testes.
+10. [tests/test_servico_estoque.py](tests/test_servico_estoque.py): testes de integração com banco e como a quebra proposital revelou testes fracos.
 
 ## Mapa rápido C# para Python
 
