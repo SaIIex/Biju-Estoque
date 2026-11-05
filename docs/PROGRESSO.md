@@ -80,6 +80,8 @@ Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/r
 - Salles prefere que eu proponha respostas padrão para ele confirmar ou corrigir.
 - **Desde 04/11: modo rápido.** Foco em entregar o projeto: perguntas objetivas, eu proponho e escrevo, ele confirma. Exercícios e verificações ficam para depois do MVP (lista em "Aprendizado adiado").
 
+- **Pasta [estudos/](../estudos/README.md):** todo arquivo Python novo ou alterado ganha uma cópia comentada lá (tom de pleno para estagiário, com comparações com C#).
+
 ## Aprendizado adiado (pós-MVP)
 - Custo médio ponderado com quantidades desiguais (1 a R$ 15 + 3 a R$ 18 = R$ 17,25).
 - Modelagem: coluna com dois significados, YAGNI, regra de sinal por tipo.
