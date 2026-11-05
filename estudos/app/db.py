@@ -27,16 +27,47 @@ class Base(DeclarativeBase):
     pass
 
 
+# Tupla de prefixos. Tupla = lista imutável (parênteses). Em C#: um array readonly.
+_PREFIXOS_POSTGRES = ("postgres://", "postgresql://")
+
+
+def normalizar_url_banco(url: str) -> str:
+    """Aponta URLs de PostgreSQL para o driver psycopg 3. Só o prefixo é trocado."""
+    # Por que existe: a URL diz QUAL banco e, opcionalmente, QUAL driver usar
+    # ("postgresql+psycopg://"). Sem o "+psycopg", o SQLAlchemy escolhe o driver
+    # antigo (psycopg2), que não instalamos, e o app quebra SÓ em produção.
+    # É parecido com a connection string do .NET, onde o "Provider" decide
+    # qual biblioteca conversa com o banco.
+    url = url.strip()  # cola do painel às vezes vem com espaço ou "\n" no fim
+    for prefixo in _PREFIXOS_POSTGRES:
+        if url.startswith(prefixo):
+            # url[len(prefixo):] = "tudo depois do prefixo" (Substring).
+            # NÃO usamos url.replace(prefixo, ...): replace troca TODAS as
+            # ocorrências, inclusive uma que esteja dentro da senha. Esse bug
+            # foi aplicado de propósito e o teste B6 NÃO pegou; daí o B7.
+            return "postgresql+psycopg://" + url[len(prefixo):]
+    return url  # SQLite e outros: não mexe
+
+
 # O "_" no começo do nome é CONVENÇÃO de "privado, uso interno deste arquivo".
 # Python não tem "private" de verdade; é um combinado entre devs.
 def _criar_engine(url: str):
-    # O SQLite, por padrão, só deixa usar a conexão na thread que a criou.
-    # Um servidor web atende requisições em threads diferentes, então
-    # desligamos essa trava. Para PostgreSQL não precisa de nada: dict vazio.
-    # Isto é um "if ternário": valor_se_verdade if condição else valor_se_falso
-    # Em C#: var connectArgs = url.StartsWith("sqlite") ? new {...} : new {};
-    connect_args = {"check_same_thread": False} if url.startswith("sqlite") else {}
-    return create_engine(url, connect_args=connect_args)
+    url = normalizar_url_banco(url)
+    if url.startswith("sqlite"):
+        # O SQLite, por padrão, só deixa usar a conexão na thread que a criou.
+        # Um servidor web atende requisições em threads diferentes, então
+        # desligamos essa trava.
+        return create_engine(url, connect_args={"check_same_thread": False})
+
+    # PostgreSQL no Neon: depois de 5 min parado, o banco "dorme" e derruba as
+    # conexões abertas. O app guarda conexões num POOL (reaproveita em vez de
+    # abrir uma nova a cada requisição, como o pool do ADO.NET). Sem cuidado,
+    # a primeira requisição depois do cochilo pegaria uma conexão morta e daria
+    # erro na cara da dona.
+    #   pool_pre_ping=True -> antes de usar, manda um "ping"; se estiver morta,
+    #                         descarta e abre outra. Custo: milissegundos.
+    #   pool_recycle=300   -> conexões com mais de 300 s são renovadas.
+    return create_engine(url, pool_pre_ping=True, pool_recycle=300)
 
 
 engine = _criar_engine(settings.database_url)

@@ -5,3 +5,4 @@ python-multipart==0.0.33
 sqlalchemy==2.1.8
 pydantic-settings==2.16.2
 itsdangerous==2.2.0
+psycopg[binary]==3.3.8

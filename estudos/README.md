@@ -23,6 +23,7 @@ Quando o código original mudar, a cópia aqui pode ficar desatualizada. Na dúv
 15. [app/rotas/auth.py](app/rotas/auth.py): login/logout e o padrão PRG.
 16. [app/rotas/pecas.py](app/rotas/pecas.py): rotas magras, transação, lista branca, closures.
 17. [tests/test_formatos.py](tests/test_formatos.py) e [tests/test_rotas.py](tests/test_rotas.py): TestClient, monkeypatch, dependency_overrides.
+18. [tests/test_db.py](tests/test_db.py): URL do banco, driver e por que um teste "passando" pode não proteger nada.
 
 ## Mapa rápido C# para Python
 

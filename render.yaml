@@ -15,3 +15,5 @@ services:
         generateValue: true
       - key: ANTHROPIC_API_KEY
         sync: false
+      - key: DATABASE_URL  # PostgreSQL do Neon (connection string)
+        sync: false

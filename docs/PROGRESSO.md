@@ -4,6 +4,10 @@
 **Prazo do MVP:** 17/11/2026 (13 dias restantes)
 **Orçamento de tempo:** 1h30 a 3h/dia, ou seja, entre ~21h e ~42h até o prazo.
 
+## Objetivo novo (05/11)
+Entregar o sistema para a dona usar de verdade e mantê-lo no ar por **pelo menos 3 meses** (feedback real, refinamento, possível venda futura, portfólio mais forte). Custo alvo: zero ou quase zero.
+Plano proposto: banco Neon gratuito; servidor Render gratuito com "despertador" (ou plano pago se ela adotar); antes da entrega: backup exportável, migrações com Alembic e segurança básica de cookie.
+
 ## Fase atual
 **Fase 4 (implementação) em andamento**, cerca de 6 dias adiantada. App no ar com login, peças, compras, vendas, perdas, ajustes e alerta; 95 testes. Próximo: PostgreSQL em produção (ver "Próximo passo"). Resumo de 04/11: [resumos/2026-11-04-resumo.md](resumos/2026-11-04-resumo.md).
 
