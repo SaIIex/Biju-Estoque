@@ -11,7 +11,8 @@ Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/r
 - 04/11: v2 do ER enviada como imagem (PRODUTO 1:N MOVIMENTACAO, tipo em texto, quantidade com sinal, saldo calculado, transacao_id opcional). Faltam no PRODUTO: código, custo médio, foto, tamanho. Coluna `preco` da movimentação tem dois significados. Tipos divergem dos requisitos ("devolucao" novo; faltam uso_proprio e defeito).
 - 04/11: v3 escrita por mim em [modelo-dados.md](mapas/modelo-dados.md) com regras R1 a R8 e exemplos para testes.
 **Fase 2 concluída em 04/11:** modelo v3 aprovado. Padrões assumidos: devolução fora do MVP; código da peça é texto livre digitado pela dona; uma foto por peça.
-**Próxima: Fase 3**, arquitetura e setup (estrutura de pastas, ambiente Python, FastAPI "hello", GitHub e deploy do esqueleto).
+**Fase 3 em andamento (04/11):** estrutura de pastas, venv, dependências fixadas, página inicial, rota /saude com teste (falhou primeiro, quebra proposital detectada), render.yaml e [arquitetura](mapas/arquitetura.md). Rodando local. Falta: repositório no GitHub e deploy no Render (contas do Salles).
+- Aviso pendente: Starlette sugere trocar `httpx` por `httpx2` no TestClient. Avaliar antes de trocar.
 **Ritmo acelerado (aprovado em 03/11):** descoberta fecha em no máximo 2 sessões. Usuários já decidido; restam Vendas, IA e Técnico, depois MoSCoW. Meta: começar a codar até 06/11.
 
 ## Requisitos levantados
@@ -72,7 +73,7 @@ Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/r
 - Confirmar com a dona a lógica do código da peça.
 
 ## Próximo passo
-1. Fase 3: setup do projeto Python e walking skeleton publicado (meta 05-06/11).
+1. Fase 3: criar repositório no GitHub, push e deploy do esqueleto no Render (meta 05-06/11).
 2. Confirmar com a dona a lógica do código da peça e se ela faz trocas.
 
 ## Preferência de trabalho

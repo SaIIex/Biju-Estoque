@@ -1,0 +1,9 @@
+[project]
+name = "biju-estoque"
+version = "0.1.0"
+description = "Controle de estoque para uma pequena loja de bijuterias, com IA para cadastro e anúncio a partir da foto."
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
