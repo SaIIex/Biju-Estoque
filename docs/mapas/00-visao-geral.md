@@ -71,7 +71,11 @@ mindmap
     Status
       Fase 1 concluída 03/11
       MoSCoW e roadmap aprovados
-      Próxima: Fase 2 modelagem ER
+      Fase 2 concluída 04/11
+        ER v3: PRODUTO 1:N MOVIMENTACAO
+        regras R1 a R8
+      Modo rápido desde 04/11
+      Próxima: Fase 3 setup e esqueleto no ar
     Restrições
       MVP até 17/11/2026
       14 dias restantes
