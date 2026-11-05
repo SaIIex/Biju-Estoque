@@ -74,10 +74,12 @@ Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/r
 - Confirmar com a dona a lógica do código da peça.
 
 ## Próximo passo
-1. Fase 4, próxima entrega: banco (SQLAlchemy, tabelas PRODUTO e MOVIMENTACAO) e serviço que usa as regras do domínio ao registrar entrada e saída.
+1. Aprovar os testes S11b e S15 (propostos após mutações sobreviventes) e adicioná-los.
+2. Fase 4, próxima entrega: telas (rotas + templates) de cadastro de peça, entrada e venda, com login simples.
 
 ## Fase 4: entregas
 - 04/11: **regras de domínio** em `app/dominio/estoque.py` (R1, R2, R3, R6). 33 testes aprovados pelo Salles, escritos antes do código; falharam no assert com stubs; 9 mutações manuais detectadas. Decisão: custo médio guardado com 4 casas (ROUND_HALF_UP), exibição com 2. Limite do alerta em aritmética inteira.
+- 04/11: **banco e serviço** (`app/db.py`, `app/modelos.py`, `app/servicos/estoque.py`). 18 testes aprovados (S1 a S14), escritos antes; falharam no assert com stubs. Decisão S14: peça sem entrada não alerta. Serviço não faz commit (unit of work na rota). Mutações: 8 de 10 detectadas; M4 (alerta pela primeira entrada) e M10 (saldo sem filtro por peça) sobreviveram e geraram as propostas S11b e S15, já validadas fora do projeto.
 2. Confirmar com a dona a lógica do código da peça e se ela faz trocas.
 
 ## Preferência de trabalho

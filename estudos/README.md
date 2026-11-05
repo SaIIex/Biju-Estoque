@@ -11,6 +11,10 @@ Quando o código original mudar, a cópia aqui pode ficar desatualizada. Na dúv
 3. [tests/test_saude.py](tests/test_saude.py): como testar uma rota com pytest.
 4. [app/dominio/estoque.py](app/dominio/estoque.py): regras de negócio puras (custo médio, saldo, sinal, alerta). Decimal para dinheiro, Enum, dataclass, exceções próprias.
 5. [tests/test_dominio_estoque.py](tests/test_dominio_estoque.py): parametrize, casos de fronteira e teste de mutação.
+6. [app/db.py](app/db.py): engine, sessão e criação das tabelas (o "DbContext" do Python).
+7. [app/modelos.py](app/modelos.py): tabelas como classes (Code First com SQLAlchemy).
+8. [app/servicos/estoque.py](app/servicos/estoque.py): serviço que junta domínio e banco; unit of work.
+9. [tests/conftest.py](tests/conftest.py): fixtures do pytest e banco em memória para testes.
 
 ## Mapa rápido C# para Python
 
@@ -31,3 +35,10 @@ Quando o código original mudar, a cópia aqui pode ficar desatualizada. Na dúv
 | `list.Sum(x => x.Qtd)` | `sum(x.qtd for x in lista)` |
 | `[Theory]` + `[InlineData]` | `@pytest.mark.parametrize` |
 | `Assert.Throws<T>(...)` | `with pytest.raises(T):` |
+| Entity Framework | SQLAlchemy |
+| `DbContext` | `Session` |
+| `SaveChanges()` | `session.commit()` (e `flush()` para enviar sem confirmar) |
+| `context.Produtos.Find(id)` | `session.get(Produto, id)` |
+| LINQ `.Where(...).Select(...)` | `select(...).where(...)` |
+| `using (var x = ...)` | `with ... as x:` |
+| construtor/Dispose da classe de teste | `@pytest.fixture` com `yield` |

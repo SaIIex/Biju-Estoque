@@ -1,0 +1,188 @@
+"""Testes do serviço de estoque: regras do domínio aplicadas com o banco.
+
+Valores esperados calculados à mão a partir de docs/mapas/modelo-dados.md.
+"""
+
+from decimal import Decimal
+
+import pytest
+from sqlalchemy import func, select
+
+from app.dominio.estoque import EstoqueInsuficienteError, TipoMovimentacao as T
+from app.modelos import Movimentacao
+from app.servicos.estoque import (
+    CodigoDuplicadoError,
+    PrecoVendaInvalidoError,
+    ProdutoNaoEncontradoError,
+    cadastrar_produto,
+    precisa_alerta,
+    registrar_ajuste,
+    registrar_entrada,
+    registrar_saida,
+    saldo,
+)
+
+
+def _colar(session, codigo="01521"):
+    return cadastrar_produto(
+        session, codigo=codigo, nome="Colar Cravejado", preco_venda=Decimal("50")
+    )
+
+
+def _total_movimentacoes(session) -> int:
+    return session.scalar(select(func.count()).select_from(Movimentacao))
+
+
+# --- cadastro -------------------------------------------------------------------
+
+def test_s1_produto_novo_comeca_zerado(session):
+    produto = _colar(session)
+    assert produto.id is not None
+    assert produto.custo_medio == Decimal("0")
+    assert produto.ativo is True
+    assert saldo(session, produto.id) == 0
+
+
+def test_s2_codigo_duplicado_e_rejeitado(session):
+    _colar(session, codigo="01521")
+    with pytest.raises(CodigoDuplicadoError):
+        _colar(session, codigo="01521")
+
+
+def test_s12_produto_inexistente(session):
+    with pytest.raises(ProdutoNaoEncontradoError):
+        registrar_entrada(session, produto_id=999, quantidade=1, custo_unitario=Decimal("10"))
+
+
+# --- entradas e custo médio (R3) ------------------------------------------------
+
+def test_s3_duas_entradas_atualizam_custo_medio(session):
+    produto = _colar(session)
+    e1 = registrar_entrada(session, produto.id, quantidade=2, custo_unitario=Decimal("15"))
+    e2 = registrar_entrada(session, produto.id, quantidade=2, custo_unitario=Decimal("18"))
+
+    assert produto.custo_medio == Decimal("16.5000")       # (2x15 + 2x18) / 4
+    assert saldo(session, produto.id) == 4
+    assert (e1.quantidade, e1.custo_unitario) == (2, Decimal("15"))
+    assert (e2.quantidade, e2.custo_unitario) == (2, Decimal("18"))
+    assert e1.tipo == T.ENTRADA
+
+
+def test_s13_entrada_com_estoque_zerado_usa_so_o_novo_custo(session):
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=2, custo_unitario=Decimal("15"))
+    registrar_saida(session, produto.id, T.VENDA, quantidade=2, preco_venda=Decimal("50"))
+    registrar_entrada(session, produto.id, quantidade=1, custo_unitario=Decimal("20"))
+
+    assert saldo(session, produto.id) == 1
+    assert produto.custo_medio == Decimal("20.0000")       # (0x15 + 1x20) / 1
+
+
+# --- saídas (R1, R4, R5) --------------------------------------------------------
+
+def test_s4_venda_grava_custo_do_momento_e_preco_real(session):
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=2, custo_unitario=Decimal("15"))
+    registrar_entrada(session, produto.id, quantidade=2, custo_unitario=Decimal("18"))
+
+    venda = registrar_saida(session, produto.id, T.VENDA, quantidade=1, preco_venda=Decimal("45"))
+
+    assert venda.quantidade == -1
+    assert venda.custo_unitario == Decimal("16.5000")
+    assert venda.preco_venda == Decimal("45")              # preço real, não o do cadastro (50)
+    assert saldo(session, produto.id) == 3
+    assert produto.custo_medio == Decimal("16.5000")       # saída não muda custo médio
+
+
+def test_s5_venda_acima_do_saldo_nao_grava_nada(session):
+    # Segunda metade do T7: depois do erro, o saldo continua 5.
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=5, custo_unitario=Decimal("10"))
+    antes = _total_movimentacoes(session)
+
+    with pytest.raises(EstoqueInsuficienteError):
+        registrar_saida(session, produto.id, T.VENDA, quantidade=6, preco_venda=Decimal("50"))
+
+    assert saldo(session, produto.id) == 5
+    assert _total_movimentacoes(session) == antes
+
+
+@pytest.mark.parametrize(
+    "tipo, preco",
+    [
+        (T.VENDA, None),              # venda sem preço
+        (T.PRESENTE, Decimal("50")),  # não-venda com preço
+        (T.DEFEITO, Decimal("50")),
+    ],
+)
+def test_s6_preco_venda_so_e_so_em_venda(session, tipo, preco):
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=3, custo_unitario=Decimal("10"))
+    with pytest.raises(PrecoVendaInvalidoError):
+        registrar_saida(session, produto.id, tipo, quantidade=1, preco_venda=preco)
+
+
+@pytest.mark.parametrize("tipo", [T.PRESENTE, T.USO_PROPRIO, T.DEFEITO])
+def test_s7_perdas_gravam_custo_medio_e_sem_preco(session, tipo):
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=3, custo_unitario=Decimal("12"))
+
+    mov = registrar_saida(session, produto.id, tipo, quantidade=1)
+
+    assert mov.quantidade == -1
+    assert mov.custo_unitario == Decimal("12.0000")
+    assert mov.preco_venda is None
+    assert saldo(session, produto.id) == 2
+
+
+# --- ajustes --------------------------------------------------------------------
+
+def test_s8_ajuste_negativo_alem_do_saldo_e_bloqueado(session):
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=2, custo_unitario=Decimal("10"))
+
+    ajuste = registrar_ajuste(session, produto.id, quantidade=-1, observacao="conferência")
+    assert ajuste.custo_unitario == Decimal("10.0000")
+    assert saldo(session, produto.id) == 1
+
+    with pytest.raises(EstoqueInsuficienteError):
+        registrar_ajuste(session, produto.id, quantidade=-2)
+    assert saldo(session, produto.id) == 1
+
+
+def test_s9_ajuste_positivo_nao_muda_custo_medio(session):
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=2, custo_unitario=Decimal("15"))
+    registrar_entrada(session, produto.id, quantidade=2, custo_unitario=Decimal("18"))
+
+    registrar_ajuste(session, produto.id, quantidade=1, observacao="achou na gaveta")
+
+    assert saldo(session, produto.id) == 5
+    assert produto.custo_medio == Decimal("16.5000")
+
+
+# --- alerta (R6) com o banco ----------------------------------------------------
+
+def test_s10_alerta_com_base_na_entrada(session):
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=4, custo_unitario=Decimal("10"))
+    registrar_saida(session, produto.id, T.VENDA, quantidade=1, preco_venda=Decimal("50"))
+    assert precisa_alerta(session, produto.id) is False    # saldo 3, limite 2
+
+    registrar_saida(session, produto.id, T.VENDA, quantidade=1, preco_venda=Decimal("50"))
+    assert precisa_alerta(session, produto.id) is True     # saldo 2, limite 2
+
+
+def test_s11_alerta_usa_a_ultima_entrada(session):
+    produto = _colar(session)
+    registrar_entrada(session, produto.id, quantidade=10, custo_unitario=Decimal("10"))
+    registrar_saida(session, produto.id, T.VENDA, quantidade=7, preco_venda=Decimal("50"))
+    assert precisa_alerta(session, produto.id) is True     # saldo 3, limite 3 (base 10)
+
+    registrar_entrada(session, produto.id, quantidade=4, custo_unitario=Decimal("10"))
+    assert precisa_alerta(session, produto.id) is False    # saldo 7, limite 2 (base 4)
+
+
+def test_s14_produto_sem_entrada_nao_alerta(session):
+    produto = _colar(session)
+    assert precisa_alerta(session, produto.id) is False
