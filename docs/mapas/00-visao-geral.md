@@ -75,7 +75,10 @@ mindmap
         ER v3: PRODUTO 1:N MOVIMENTACAO
         regras R1 a R8
       Modo rápido desde 04/11
-      Próxima: Fase 3 setup e esqueleto no ar
+      Fase 3 concluída 04/11
+        GitHub SaIIex/Biju-Estoque
+        no ar: biju-estoque.onrender.com
+      Próxima: Fase 4 regras de domínio
     Restrições
       MVP até 17/11/2026
       14 dias restantes
