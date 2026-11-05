@@ -196,3 +196,25 @@ def test_m6_ajuste_pelo_formulario(logado, session):
     p = _peca(session, qtd=3)
     logado.post(f"/pecas/{p.id}/ajuste", data={"quantidade": "-1", "observacao": "conferência"})
     assert saldo(session, p.id) == 2
+
+
+def test_m1b_venda_grava_o_preco_digitado(logado, session):
+    # Pega o bug R9: venda gravando o preço do cadastro em vez do digitado.
+    from app.modelos import Movimentacao
+
+    p = _peca(session, qtd=3, custo="15")
+    logado.post(f"/pecas/{p.id}/venda", data={"quantidade": "1", "preco_venda": "45,00"})
+    venda = session.scalar(select(Movimentacao).where(Movimentacao.tipo == T.VENDA))
+    assert venda.preco_venda == Decimal("45")
+
+
+def test_p4_peca_desativada_some_da_lista(logado, session):
+    # Pega o bug R10: regra R8 (peça desativada não aparece) sem teste.
+    _peca(session, codigo="A", nome="Anel Ativo", qtd=0)
+    inativa = _peca(session, codigo="B", nome="Brinco Desativado", qtd=0)
+    inativa.ativo = False
+    session.commit()
+
+    r = logado.get("/")
+    assert "Anel Ativo" in r.text
+    assert "Brinco Desativado" not in r.text
