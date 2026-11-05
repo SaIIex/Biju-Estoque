@@ -9,6 +9,8 @@ Quando o código original mudar, a cópia aqui pode ficar desatualizada. Na dúv
 1. [app/config.py](app/config.py): como o app lê configuração (senha, chave de API).
 2. [app/main.py](app/main.py): como nasce uma aplicação FastAPI e como funcionam rotas.
 3. [tests/test_saude.py](tests/test_saude.py): como testar uma rota com pytest.
+4. [app/dominio/estoque.py](app/dominio/estoque.py): regras de negócio puras (custo médio, saldo, sinal, alerta). Decimal para dinheiro, Enum, dataclass, exceções próprias.
+5. [tests/test_dominio_estoque.py](tests/test_dominio_estoque.py): parametrize, casos de fronteira e teste de mutação.
 
 ## Mapa rápido C# para Python
 
@@ -22,3 +24,10 @@ Quando o código original mudar, a cópia aqui pode ficar desatualizada. Na dúv
 | `using` | `import` / `from ... import` |
 | xUnit + `WebApplicationFactory` | pytest + `TestClient` |
 | `namespace` / pasta | pacote (pasta com `__init__.py`) |
+| `record` | `@dataclass(frozen=True)` |
+| `decimal` | `Decimal("...")` (sempre a partir de texto) |
+| `decimal?` | `Decimal \| None` |
+| `$"texto {x}"` | `f"texto {x}"` |
+| `list.Sum(x => x.Qtd)` | `sum(x.qtd for x in lista)` |
+| `[Theory]` + `[InlineData]` | `@pytest.mark.parametrize` |
+| `Assert.Throws<T>(...)` | `with pytest.raises(T):` |

@@ -74,7 +74,10 @@ Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/r
 - Confirmar com a dona a lógica do código da peça.
 
 ## Próximo passo
-1. Fase 4: implementação incremental. Primeira entrega: regras de domínio puras (custo médio, saldo, alerta) com testes a partir dos exemplos de modelo-dados.md.
+1. Fase 4, próxima entrega: banco (SQLAlchemy, tabelas PRODUTO e MOVIMENTACAO) e serviço que usa as regras do domínio ao registrar entrada e saída.
+
+## Fase 4: entregas
+- 04/11: **regras de domínio** em `app/dominio/estoque.py` (R1, R2, R3, R6). 33 testes aprovados pelo Salles, escritos antes do código; falharam no assert com stubs; 9 mutações manuais detectadas. Decisão: custo médio guardado com 4 casas (ROUND_HALF_UP), exibição com 2. Limite do alerta em aritmética inteira.
 2. Confirmar com a dona a lógica do código da peça e se ela faz trocas.
 
 ## Preferência de trabalho
