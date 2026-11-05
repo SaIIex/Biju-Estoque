@@ -5,7 +5,10 @@
 **Orçamento de tempo:** 1h30 a 3h/dia, ou seja, entre ~21h e ~42h até o prazo.
 
 ## Fase atual
-Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/requisitos.md)) e roadmap ([roadmap](mapas/roadmap.md)) aprovados.
+**Fase 4 (implementação) em andamento**, cerca de 6 dias adiantada. App no ar com login, peças, compras, vendas, perdas, ajustes e alerta; 95 testes. Próximo: PostgreSQL em produção (ver "Próximo passo"). Resumo de 04/11: [resumos/2026-11-04-resumo.md](resumos/2026-11-04-resumo.md).
+
+### Histórico das fases
+**Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/requisitos.md)) e roadmap ([roadmap](mapas/roadmap.md)) aprovados.
 **Fase 2 (modelagem ER) iniciada em 03/11**, um dia antes do roadmap. Salles propõe as tabelas; eu reviso.
 - 04/11: v1 em texto revisada (respostas às 5 perguntas). Pendente: decidir pedido x venda direta, saldo calculado x coluna, tipo como texto; exercício de custo médio; v2 em erDiagram.
 - 04/11: v2 do ER enviada como imagem (PRODUTO 1:N MOVIMENTACAO, tipo em texto, quantidade com sinal, saldo calculado, transacao_id opcional). Faltam no PRODUTO: código, custo médio, foto, tamanho. Coluna `preco` da movimentação tem dois significados. Tipos divergem dos requisitos ("devolucao" novo; faltam uso_proprio e defeito).
