@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h2>Peças</h2>
+
+{% for item in itens %}
+<article>
+  <div class="linha">
+    <a href="/pecas/{{ item.produto.id }}"><strong>{{ item.produto.nome }}</strong></a>
+    {% if item.alerta %}<span class="alerta">Estoque baixo</span>{% endif %}
+  </div>
+  <div class="linha discreto">
+    <span>Cód. {{ item.produto.codigo }}{% if item.produto.tamanho %} · Tam. {{ item.produto.tamanho }}{% endif %}</span>
+    <span>{{ item.saldo }} un. · {{ item.produto.preco_venda | brl }}</span>
+  </div>
+</article>
+{% else %}
+<p>Nenhuma peça ainda. <a href="/pecas/nova">Cadastre a primeira</a>.</p>
+{% endfor %}
+{% endblock %}

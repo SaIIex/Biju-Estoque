@@ -16,6 +16,13 @@ Quando o código original mudar, a cópia aqui pode ficar desatualizada. Na dúv
 8. [app/servicos/estoque.py](app/servicos/estoque.py): serviço que junta domínio e banco; unit of work.
 9. [tests/conftest.py](tests/conftest.py): fixtures do pytest e banco em memória para testes.
 10. [tests/test_servico_estoque.py](tests/test_servico_estoque.py): testes de integração com banco e como a quebra proposital revelou testes fracos.
+11. [app/formatos.py](app/formatos.py): validar entrada do usuário com regex; "R$ 1.234,50".
+12. [app/auth.py](app/auth.py): login com senha em variável de ambiente, padrão seguro, ataque de tempo.
+13. [app/web.py](app/web.py): filtros do Jinja2, fuso horário, autoescape contra XSS.
+14. [app/main.py](app/main.py): lifespan, middleware de sessão, exception handler.
+15. [app/rotas/auth.py](app/rotas/auth.py): login/logout e o padrão PRG.
+16. [app/rotas/pecas.py](app/rotas/pecas.py): rotas magras, transação, lista branca, closures.
+17. [tests/test_formatos.py](tests/test_formatos.py) e [tests/test_rotas.py](tests/test_rotas.py): TestClient, monkeypatch, dependency_overrides.
 
 ## Mapa rápido C# para Python
 

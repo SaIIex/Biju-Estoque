@@ -5,10 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Biju Estoque{% endblock %}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css">
-  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    .alerta { background: #b45309; color: #fff; padding: .1rem .5rem; border-radius: .4rem; font-size: .8rem; white-space: nowrap; }
+    .linha { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; }
+    .discreto { color: var(--pico-muted-color); font-size: .9rem; }
+    .msg-ok { border-left: 4px solid #15803d; padding: .5rem 1rem; }
+    .msg-erro { border-left: 4px solid #b91c1c; padding: .5rem 1rem; }
+    article { margin-bottom: 1rem; }
+    nav form { margin: 0; }
+    nav button { padding: .3rem .8rem; }
+  </style>
 </head>
 <body>
   <main class="container">
+    {% if request.session.get("logado") %}
+    <nav>
+      <ul><li><a href="/"><strong>Biju Estoque</strong></a></li></ul>
+      <ul>
+        <li><a href="/pecas/nova">+ Peça</a></li>
+        <li><form method="post" action="/logout"><button class="secondary outline">Sair</button></form></li>
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% if flash %}<p class="msg-ok" role="status">{{ flash }}</p>{% endif %}
+    {% if erro %}<p class="msg-erro" role="alert">{{ erro }}</p>{% endif %}
+
     {% block conteudo %}{% endblock %}
   </main>
 </body>

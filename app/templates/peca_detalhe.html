@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<article>
+  <div class="linha">
+    <h2 style="margin:0">{{ produto.nome }}</h2>
+    {% if alerta %}<span class="alerta">Estoque baixo</span>{% endif %}
+  </div>
+  <p class="discreto">Cód. {{ produto.codigo }}{% if produto.tamanho %} · Tam. {{ produto.tamanho }}{% endif %}</p>
+  <div class="grid">
+    <div><small>Em estoque</small><br><strong>{{ saldo }} un.</strong></div>
+    <div><small>Preço de venda</small><br><strong>{{ produto.preco_venda | brl }}</strong></div>
+    <div><small>Custo médio</small><br><strong>{{ produto.custo_medio | brl }}</strong></div>
+  </div>
+</article>
+
+<details open>
+  <summary role="button">Registrar venda</summary>
+  <form method="post" action="/pecas/{{ produto.id }}/venda">
+    <div class="grid">
+      <label>Quantidade
+        <input name="quantidade" type="number" min="1" value="1" inputmode="numeric" required>
+      </label>
+      <label>Preço cobrado (cada)
+        <input name="preco_venda" inputmode="decimal" value="{{ '%.2f' | format(produto.preco_venda) | replace('.', ',') }}" required>
+      </label>
+    </div>
+    <button type="submit">Vender</button>
+  </form>
+</details>
+
+<details>
+  <summary role="button" class="secondary">Entrada (compra)</summary>
+  <form method="post" action="/pecas/{{ produto.id }}/entrada">
+    <div class="grid">
+      <label>Quantidade
+        <input name="quantidade" type="number" min="1" inputmode="numeric" required>
+      </label>
+      <label>Custo de cada uma
+        <input name="custo_unitario" inputmode="decimal" placeholder="15,00" required>
+      </label>
+    </div>
+    <button type="submit" class="secondary">Registrar entrada</button>
+  </form>
+</details>
+
+<details>
+  <summary role="button" class="secondary">Presente, uso próprio ou defeito</summary>
+  <form method="post" action="/pecas/{{ produto.id }}/saida">
+    <div class="grid">
+      <label>Motivo
+        <select name="tipo" required>
+          {% for t in outras_saidas %}<option value="{{ t.value }}">{{ t | rotulo_tipo }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Quantidade
+        <input name="quantidade" type="number" min="1" value="1" inputmode="numeric" required>
+      </label>
+    </div>
+    <button type="submit" class="secondary">Registrar saída</button>
+  </form>
+</details>
+
+<details>
+  <summary role="button" class="secondary">Ajuste de conferência</summary>
+  <form method="post" action="/pecas/{{ produto.id }}/ajuste">
+    <div class="grid">
+      <label>Diferença (ex.: -1 ou 1)
+        <input name="quantidade" type="number" inputmode="numeric" required>
+      </label>
+      <label>Observação
+        <input name="observacao" placeholder="conferência semanal">
+      </label>
+    </div>
+    <button type="submit" class="secondary">Registrar ajuste</button>
+  </form>
+</details>
+
+<h3>Histórico</h3>
+{% for m in historico %}
+<div class="linha" style="border-bottom:1px solid var(--pico-muted-border-color); padding:.4rem 0">
+  <span>{{ m.tipo | rotulo_tipo }} <strong>{{ '%+d' | format(m.quantidade) }}</strong>
+    {% if m.preco_venda is not none %}· {{ m.preco_venda | brl }}{% else %}· custo {{ m.custo_unitario | brl }}{% endif %}
+    {% if m.observacao %}<span class="discreto">· {{ m.observacao }}</span>{% endif %}
+  </span>
+  <span class="discreto">{{ m.criado_em | data_hora }}</span>
+</div>
+{% else %}
+<p class="discreto">Sem movimentações.</p>
+{% endfor %}
+{% endblock %}

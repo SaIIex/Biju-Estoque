@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<article>
+  <h1>Biju Estoque</h1>
+  <form method="post" action="/login">
+    <label>Senha
+      <input type="password" name="senha" autocomplete="current-password" required autofocus>
+    </label>
+    <button type="submit">Entrar</button>
+  </form>
+</article>
+{% endblock %}

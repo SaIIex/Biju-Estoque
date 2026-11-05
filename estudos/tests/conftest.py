@@ -46,3 +46,27 @@ def session():
     with Session(engine) as s:
         yield s
     engine.dispose()  # fecha as conexões
+
+
+# =============================================================================
+# Fixtures das telas (adicionadas junto com o login)
+# =============================================================================
+# Uma fixture pode usar OUTRA fixture: "client" recebe "session" (o banco em
+# memória acima) e "monkeypatch" (fixture embutida do pytest).
+#
+# monkeypatch.setattr(objeto, "atributo", valor): troca um valor SÓ durante
+# o teste e desfaz sozinho no final. Aqui trocamos a senha configurada por
+# uma conhecida. Em C#, o equivalente seria injetar um IOptions<Settings>
+# falso na WebApplicationFactory.
+#
+# app.dependency_overrides[get_session] = ...: diz ao FastAPI "onde alguma
+# rota pedir get_session, entregue ESTA função no lugar". Assim as rotas
+# usam o banco em memória do teste sem mudar uma linha do código delas.
+# Em C#: builder.ConfigureServices(s => s.Replace(... DbContext de teste ...)).
+#
+# "logado" é uma fixture em cima de "client": faz o login e devolve o
+# cliente com o cookie de sessão. Testes que precisam estar logados só
+# pedem "logado" como parâmetro.
+#
+# (Código completo e atual em tests/conftest.py.)
+# =============================================================================

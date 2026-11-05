@@ -74,11 +74,15 @@ Fase 1: Descoberta. **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/r
 - Confirmar com a dona a lógica do código da peça.
 
 ## Próximo passo
-1. Fase 4, próxima entrega: telas (rotas + templates) de cadastro de peça, entrada e venda, com login simples.
+1. Aprovar os testes M1b (venda grava o preço digitado) e P4 (peça desativada some da lista), propostos após mutações sobreviventes.
+2. Ajuste de usabilidade: mensagem de erro fica fora da vista no celular após erro em formulário longo.
+3. **Antes de a dona usar de verdade: banco PostgreSQL em produção.** No Render gratuito o SQLite é apagado a cada deploy/reinício.
+4. Próxima entrega: relatório de lucro do mês (R7).
 
 ## Fase 4: entregas
 - 04/11: **regras de domínio** em `app/dominio/estoque.py` (R1, R2, R3, R6). 33 testes aprovados pelo Salles, escritos antes do código; falharam no assert com stubs; 9 mutações manuais detectadas. Decisão: custo médio guardado com 4 casas (ROUND_HALF_UP), exibição com 2. Limite do alerta em aritmética inteira.
 - 04/11: **banco e serviço** (`app/db.py`, `app/modelos.py`, `app/servicos/estoque.py`). 18 testes aprovados (S1 a S14), escritos antes; falharam no assert com stubs. Decisão S14: peça sem entrada não alerta. Serviço não faz commit (unit of work na rota). Mutações: 8 de 10 detectadas; M4 (alerta pela primeira entrada) e M10 (saldo sem filtro por peça) sobreviveram e geraram os testes S11b e S15, aprovados e adicionados. Agora 10 de 10 mutações detectadas; 55 testes no total.
+- 04/11: **telas e login** (`app/auth.py`, `app/formatos.py`, `app/web.py`, `app/rotas/`, templates). 38 testes aprovados, escritos antes; 93 testes no total. Decisões: custo escondido na lista e visível no detalhe; cadastro já com a primeira compra; senha única em variável de ambiente, sistema fechado se não configurada; formulários sem HTMX. Mutações: 8 de 10 detectadas; R9 e R10 viraram as propostas M1b e P4. Testado no navegador (celular): cadastro, venda com desconto, venda acima do estoque recusada.
 2. Confirmar com a dona a lógica do código da peça e se ela faz trocas.
 
 ## Preferência de trabalho

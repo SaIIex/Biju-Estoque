@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h2>Nova peça</h2>
+<form method="post" action="/pecas">
+  <label>Nome
+    <input name="nome" value="{{ valores.nome or '' }}" placeholder="Colar Cravejado" required>
+  </label>
+  <div class="grid">
+    <label>Código
+      <input name="codigo" value="{{ valores.codigo or '' }}" placeholder="01521" required>
+    </label>
+    <label>Tamanho <span class="discreto">(opcional)</span>
+      <input name="tamanho" value="{{ valores.tamanho or '' }}">
+    </label>
+  </div>
+  <label>Preço de venda
+    <input name="preco_venda" inputmode="decimal" value="{{ valores.preco_venda or '' }}" placeholder="50,00" required>
+  </label>
+
+  <fieldset>
+    <legend>Primeira compra <span class="discreto">(opcional)</span></legend>
+    <div class="grid">
+      <label>Quantidade
+        <input name="quantidade" type="number" min="1" inputmode="numeric" value="{{ valores.quantidade or '' }}">
+      </label>
+      <label>Custo de cada uma
+        <input name="custo_unitario" inputmode="decimal" value="{{ valores.custo_unitario or '' }}" placeholder="15,00">
+      </label>
+    </div>
+  </fieldset>
+
+  <button type="submit">Cadastrar</button>
+</form>
+{% endblock %}
