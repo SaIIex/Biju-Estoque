@@ -30,3 +30,10 @@ def test_b6_senha_com_postgres_no_meio_nao_e_alterada():
     # Só o prefixo muda. Um "postgres://" dentro da senha ou do host fica intacto.
     url = "postgresql://u:postgres://x@host/banco"
     assert normalizar_url_banco(url) == "postgresql+psycopg://u:postgres://x@host/banco"
+
+
+def test_b7_senha_com_o_mesmo_prefixo_fica_intacta():
+    # Pega o bug de usar replace: ele trocaria também o "postgres://" da senha.
+    # (O B6 não pegava, porque o prefixo da URL era outro.)
+    url = "postgres://u:postgres://x@host/banco"
+    assert normalizar_url_banco(url) == "postgresql+psycopg://u:postgres://x@host/banco"

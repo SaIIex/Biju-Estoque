@@ -1,15 +1,25 @@
 # Progresso
 
-**Última atualização:** 04/11/2026
-**Prazo do MVP:** 17/11/2026 (13 dias restantes)
-**Orçamento de tempo:** 1h30 a 3h/dia, ou seja, entre ~21h e ~42h até o prazo.
+**Última atualização:** 13/11/2026
+**Prazo do MVP:** 17/11/2026 (**4 dias restantes**)
+**Orçamento de tempo:** 1h30 a 3h/dia, ou seja, entre ~6h e ~12h até o prazo.
+
+## ⚠️ Alerta de prazo (13/11)
+Sem sessões de 06/11 a 12/11: a folga de ~6 dias foi consumida e o prazo está apertado. A IA ainda não foi feita e é o requisito central da vaga.
+Plano proposto até a inscrição (cortes em "Depois da inscrição"):
+- 13/11: Neon confirmado + despertador (Salles, ~15 min); lucro do mês (R7) com testes.
+- 14/11: IA anúncio por foto (Fase 5) com testes e checagem de vazamento do custo.
+- 15/11: segurança básica (cookie só HTTPS), correção da mensagem de erro no celular, entrega para a dona.
+- 16/11: README com prints/GIF e roteiro de 2 minutos.
+- 17/11: folga e inscrição.
+Depois da inscrição: botão de backup, Alembic (antes da primeira mudança de tabela), consulta em linguagem natural (Could).
 
 ## Objetivo novo (05/11)
 Entregar o sistema para a dona usar de verdade e mantê-lo no ar por **pelo menos 3 meses** (feedback real, refinamento, possível venda futura, portfólio mais forte). Custo alvo: zero ou quase zero.
 Plano proposto: banco Neon gratuito; servidor Render gratuito com "despertador" (ou plano pago se ela adotar); antes da entrega: backup exportável, migrações com Alembic e segurança básica de cookie.
 
 ## Fase atual
-**Fase 4 (implementação) em andamento**, cerca de 6 dias adiantada. App no ar com login, peças, compras, vendas, perdas, ajustes e alerta; 95 testes. Próximo: PostgreSQL em produção (ver "Próximo passo"). Resumo de 04/11: [resumos/2026-11-04-resumo.md](resumos/2026-11-04-resumo.md).
+**Fase 4 (implementação) em andamento**, cerca de 6 dias adiantada. App no ar com login, peças, compras, vendas, perdas, ajustes e alerta; 102 testes. Suporte a PostgreSQL (Neon) publicado em 05/11 (aguardando o Salles confirmar as tabelas no painel do Neon). Resumo de 04/11: [resumos/2026-11-04-resumo.md](resumos/2026-11-04-resumo.md).
 
 ### Histórico das fases
 **Fase 1 concluída em 03/11.** MoSCoW ([requisitos](mapas/requisitos.md)) e roadmap ([roadmap](mapas/roadmap.md)) aprovados.
