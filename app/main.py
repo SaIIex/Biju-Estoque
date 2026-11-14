@@ -7,7 +7,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.auth import NaoAutenticadoError
 from app.config import settings
 from app.db import criar_tabelas
-from app.rotas import auth, pecas
+from app.rotas import auth, pecas, relatorio
 
 
 @asynccontextmanager
@@ -38,3 +38,4 @@ def saude():
 
 app.include_router(auth.router)
 app.include_router(pecas.router)
+app.include_router(relatorio.router)

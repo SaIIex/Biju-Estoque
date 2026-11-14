@@ -24,6 +24,8 @@ Quando o código original mudar, a cópia aqui pode ficar desatualizada. Na dúv
 16. [app/rotas/pecas.py](app/rotas/pecas.py): rotas magras, transação, lista branca, closures.
 17. [tests/test_formatos.py](tests/test_formatos.py) e [tests/test_rotas.py](tests/test_rotas.py): TestClient, monkeypatch, dependency_overrides.
 18. [tests/test_db.py](tests/test_db.py): URL do banco, driver e por que um teste "passando" pode não proteger nada.
+19. [app/dominio/lucro.py](app/dominio/lucro.py) e [app/servicos/relatorio.py](app/servicos/relatorio.py): lucro por CMV, fuso horário na virada do mês, agrupamento.
+20. [app/rotas/relatorio.py](app/rotas/relatorio.py), [tests/test_dominio_lucro.py](tests/test_dominio_lucro.py) e [tests/test_relatorio.py](tests/test_relatorio.py): query string e testes que controlam o tempo.
 
 ## Mapa rápido C# para Python
 

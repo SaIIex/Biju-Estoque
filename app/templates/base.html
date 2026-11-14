@@ -8,6 +8,7 @@
   <style>
     .alerta { background: #b45309; color: #fff; padding: .1rem .5rem; border-radius: .4rem; font-size: .8rem; white-space: nowrap; }
     .linha { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; }
+    .linha > :last-child { white-space: nowrap; }
     .discreto { color: var(--pico-muted-color); font-size: .9rem; }
     .msg-ok { border-left: 4px solid #15803d; padding: .5rem 1rem; }
     .msg-erro { border-left: 4px solid #b91c1c; padding: .5rem 1rem; }
@@ -22,6 +23,7 @@
     <nav>
       <ul><li><a href="/"><strong>Biju Estoque</strong></a></li></ul>
       <ul>
+        <li><a href="/relatorio">Lucro</a></li>
         <li><a href="/pecas/nova">+ Peça</a></li>
         <li><form method="post" action="/logout"><button class="secondary outline">Sair</button></form></li>
       </ul>

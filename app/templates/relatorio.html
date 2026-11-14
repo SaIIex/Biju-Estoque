@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+{% if rel %}
+<div class="linha">
+  <a href="/relatorio?mes={{ anterior }}" aria-label="Mês anterior">&larr;</a>
+  <h2 style="margin:0">{{ titulo_mes }}</h2>
+  <a href="/relatorio?mes={{ proximo }}" aria-label="Próximo mês">&rarr;</a>
+</div>
+
+<article>
+  <small>Lucro do mês</small>
+  <h1 style="margin:.2rem 0; color: {{ '#15803d' if rel.total.resultado >= 0 else '#b91c1c' }}">
+    {{ rel.total.resultado | brl }}
+  </h1>
+  <p class="discreto">{{ rel.total.unidades_vendidas }} peça(s) vendida(s)</p>
+
+  <div class="linha"><span>Vendas</span><span>{{ rel.total.receita | brl }}</span></div>
+  <div class="linha"><span>(-) Custo das peças vendidas</span><span>{{ rel.total.cmv | brl }}</span></div>
+  <div class="linha"><strong>Lucro bruto</strong><strong>{{ rel.total.lucro_bruto | brl }}</strong></div>
+  <div class="linha"><span>(-) Perdas (presente, uso, defeito, ajuste)</span><span>{{ rel.total.perdas | brl }}</span></div>
+  {% if rel.total.ajustes_positivos %}
+  <div class="linha"><span>(+) Peças achadas na conferência</span><span>{{ rel.total.ajustes_positivos | brl }}</span></div>
+  {% endif %}
+</article>
+
+<h3>Por peça</h3>
+{% for p in rel.por_peca %}
+<div class="linha" style="border-bottom:1px solid var(--pico-muted-border-color); padding:.4rem 0">
+  <span><a href="/pecas/{{ p.produto_id }}">{{ p.nome }}</a>
+    <span class="discreto">· {{ p.unidades_vendidas }} un.</span></span>
+  <strong>{{ p.resultado | brl }}</strong>
+</div>
+{% else %}
+<p class="discreto">Nenhuma venda neste mês.</p>
+{% endfor %}
+{% endif %}
+{% endblock %}
