@@ -103,3 +103,11 @@ def test_r7_tela_mostra_resultado_e_pecas(logado, session):
 def test_r8_mes_invalido_da_400(logado):
     for mes in ["2026-13", "abc", "2026-1-1"]:
         assert logado.get(f"/relatorio?mes={mes}").status_code == 400
+
+
+def test_r9_venda_a_meia_noite_do_dia_1_conta_so_no_mes_novo(session):
+    # Pega o bug de fim de mês inclusivo (<= em vez de <): a venda contaria nos dois meses.
+    colar = _peca(session, "C1", "Colar")
+    _venda_em(session, colar, _utc(2026, 12, 1, 3, 0))  # 01/12 00:00 em Brasília
+    assert relatorio_do_mes(session, 2026, 11).total.unidades_vendidas == 0
+    assert relatorio_do_mes(session, 2026, 12).total.unidades_vendidas == 1
