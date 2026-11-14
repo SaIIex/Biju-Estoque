@@ -7,7 +7,7 @@
 ## ⚠️ Alerta de prazo (13/11)
 Sem sessões de 06/11 a 12/11: a folga de ~6 dias foi consumida e o prazo está apertado. A IA ainda não foi feita e é o requisito central da vaga.
 Plano proposto até a inscrição (cortes em "Depois da inscrição"):
-- 13/11: Neon confirmado (**feito**) + despertador (Salles, ~5 min, **pendente**); lucro do mês (R7) com testes (**feito**).
+- 13/11: Neon confirmado (**feito**) + despertador no cron-job.org a cada 10 min (**feito**); lucro do mês (R7) com testes (**feito**).
 - 14/11: IA anúncio por foto (Fase 5) com testes e checagem de vazamento do custo.
 - 15/11: segurança básica (cookie só HTTPS), correção da mensagem de erro no celular, entrega para a dona.
 - 16/11: README com prints/GIF e roteiro de 2 minutos.
